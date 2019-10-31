@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ArchRepositorySample</string>
+    <string name="add_movie">Add movie</string>
+    <string name="add_title">add title</string>
+    <string name="add_synopsis">add synopsis</string>
+    <string name="save_movie">Save movie</string>
+    <string name="cancel">Cancel</string>
+</resources>
