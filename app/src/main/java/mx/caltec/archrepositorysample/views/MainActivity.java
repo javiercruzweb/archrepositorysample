@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
 
-        MovieListViewModel.Factory factory = new MovieListViewModel.Factory(getApplication());
-        viewModel = new ViewModelProvider(this, factory).get(MovieListViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MovieListViewModel.class);
 
         setUI();
 

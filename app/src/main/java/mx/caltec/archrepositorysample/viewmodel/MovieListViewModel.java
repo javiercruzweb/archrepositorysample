@@ -52,20 +52,4 @@ public class MovieListViewModel extends AndroidViewModel {
         mRepository.insertMovie(movie);
     }
 
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-
-        @NonNull
-        private final Application mApplication;
-
-        public Factory(@NonNull Application application) {
-            mApplication = application;
-        }
-
-        @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            //noinspection unchecked
-            return (T) new MovieListViewModel(mApplication);
-        }
-    }
-
 }
