@@ -22,6 +22,6 @@ public interface MovieDao {
     void inserMovies(Movie... movies);
 
     @Query("SELECT * FROM movies WHERE movies.title like :filter")
-    LiveData<List<Movie>> loadMoviesLike(String filter);
+    List<Movie> loadMoviesLike(String filter);
 
 }

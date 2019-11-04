@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String query) {
-                //viewModel.loadMoviesByName(query);
+                viewModel.getMoviesLike(query);
                 return true;
             }
 

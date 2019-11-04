@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import java.util.List;
 
@@ -70,11 +71,13 @@ public class DataRepository {
                 Log.d(TAG, "remote movies size: " + remoteMovies.size());
                 //random movies
 
+                /*
                 Movie remoteMovie = new Movie();
                 remoteMovie.setTitle(String.valueOf(Math.random()));
                 remoteMovie.setSypnosis(String.valueOf(Math.random()));
 
                 mDatabase.movieDao().insertMovie(remoteMovie);
+                */
             }
 
             @NonNull
@@ -94,6 +97,16 @@ public class DataRepository {
     public void insertMovie(final Movie movie) {
         mAppExecutors.diskIO().execute(() ->
                 mDatabase.runInTransaction(() -> mDatabase.movieDao().insertMovie(movie)));
+    }
+
+    public LiveData<Resource<List<Movie>>> getMoviesLike(String like) {
+        MediatorLiveData<Resource<List<Movie>>> data = new MediatorLiveData<>();
+        mAppExecutors.diskIO().execute(() -> {
+            Resource<List<Movie>> resource
+                    = Resource.success(mDatabase.movieDao().loadMoviesLike("%"+like+"%"));
+            data.postValue(resource);
+        });
+        return data;
     }
 
 }

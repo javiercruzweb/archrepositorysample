@@ -7,8 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
+import androidx.lifecycle.Observer;
 
 import java.util.List;
 
@@ -20,6 +19,8 @@ import mx.caltec.archrepositorysample.data.model.Movie;
 public class MovieListViewModel extends AndroidViewModel {
 
     private final DataRepository mRepository;
+
+    private String mLike;
 
     private final MediatorLiveData<Resource<List<Movie>>> mObservableMovies;
 
@@ -35,6 +36,25 @@ public class MovieListViewModel extends AndroidViewModel {
      */
     public LiveData<Resource<List<Movie>>> getMovies() {
         return mObservableMovies;
+    }
+
+    public void getMoviesLike(String like) {
+        this.mLike = like;
+
+        if (mLike==null||mLike.trim().isEmpty()) {
+            mObservableMovies.removeSource(mRepository.getMoviesLike(""));
+            mObservableMovies.addSource(mRepository.getMovies(), mObservableMovies::setValue);
+            return;
+        }
+
+        mObservableMovies.removeSource(mRepository.getMovies());
+        mObservableMovies.addSource(mRepository.getMoviesLike(mLike), new Observer<Resource<List<Movie>>>() {
+            @Override
+            public void onChanged(Resource<List<Movie>> resource) {
+                Log.d("xy", (resource.data!=null ? resource.data.size() + "" : "0"));
+                mObservableMovies.setValue(resource);
+            }
+        });
     }
 
     public void reloadMovies() {

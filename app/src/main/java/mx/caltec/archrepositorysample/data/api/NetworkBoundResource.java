@@ -36,7 +36,6 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     @MainThread
     protected NetworkBoundResource() {
-        result.setValue(Resource.loading(null));
         LiveData<ResultType> dbSource = loadFromDb();
         result.addSource(dbSource, data -> {
             result.removeSource(dbSource);
@@ -56,14 +55,12 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
             @Override
             public void onNext(RequestType requestType) {
-                Log.d(TAG, "onNext");
                 result.removeSource(dbSource);
                 saveResultAndReInit(requestType);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "onError: " + e.getMessage());
                 onFetchFailed();
                 result.removeSource(dbSource);
                 result.addSource(dbSource, newData ->
