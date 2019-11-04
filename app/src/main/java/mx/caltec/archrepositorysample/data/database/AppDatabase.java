@@ -1,4 +1,4 @@
-package mx.caltec.archrepositorysample.data;
+package mx.caltec.archrepositorysample.data.database;
 
 import android.content.Context;
 
@@ -10,13 +10,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import mx.caltec.archrepositorysample.data.dao.MovieDao;
+import mx.caltec.archrepositorysample.data.database.dao.MovieDao;
 import mx.caltec.archrepositorysample.data.model.Movie;
 import mx.caltec.archrepositorysample.util.AppExecutors;
 
 @Database(entities = {Movie.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
-    public static final String DATABASE_NAME = "movieDb";
+    private static final String DATABASE_NAME = "movieDb";
 
     private static AppDatabase instance;
 
@@ -58,15 +58,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
                         executors.diskIO().execute(() -> {
-
                             AppDatabase database = AppDatabase.getInstance(appContext, executors);
-
-                            //select movie list in order to create the DB
-                            database.runInTransaction(() -> {
-                                database.movieDao().loadAllMovies();
-
-                            });
-
                             // notify that the database was created and it's ready to be used
                             database.setDatabaseCreated();
                         });

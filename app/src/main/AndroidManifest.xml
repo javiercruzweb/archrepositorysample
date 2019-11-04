@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="mx.caltec.archrepositorysample">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MovieApp"
         android:allowBackup="true"

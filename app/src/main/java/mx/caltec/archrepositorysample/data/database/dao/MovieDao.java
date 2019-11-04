@@ -1,4 +1,4 @@
-package mx.caltec.archrepositorysample.data.dao;
+package mx.caltec.archrepositorysample.data.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -17,4 +17,11 @@ public interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovie(Movie movie);
+
+    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+    void inserMovies(Movie... movies);
+
+    @Query("SELECT * FROM movies WHERE movies.title like :filter")
+    LiveData<List<Movie>> loadMoviesLike(String filter);
+
 }
