@@ -1,22 +1,21 @@
-package mx.caltec.archrepositorysample.viewmodel;
+package mx.caltec.archrepositorysample.presentation.viewmodels;
 
-import android.app.Application;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
-import mx.caltec.archrepositorysample.MovieApp;
+import javax.inject.Inject;
+
 import mx.caltec.archrepositorysample.data.DataRepository;
 import mx.caltec.archrepositorysample.data.Resource;
 import mx.caltec.archrepositorysample.data.model.Movie;
 
-public class MovieListViewModel extends AndroidViewModel {
+public class MovieListViewModel extends ViewModel {
+    private static final String TAG = "MovieListViewModel";
 
     private final DataRepository mRepository;
 
@@ -24,9 +23,9 @@ public class MovieListViewModel extends AndroidViewModel {
 
     private final MediatorLiveData<Resource<List<Movie>>> mObservableMovies;
 
-    public MovieListViewModel(@NonNull Application application) {
-        super(application);
-        mRepository = ((MovieApp) application).getRepository();
+    @Inject
+    public MovieListViewModel(DataRepository dataRepository) {
+        mRepository = dataRepository;
         mObservableMovies = new MediatorLiveData<>();
         mObservableMovies.addSource(mRepository.getMovies(), mObservableMovies::setValue);
     }
@@ -48,12 +47,9 @@ public class MovieListViewModel extends AndroidViewModel {
         }
 
         mObservableMovies.removeSource(mRepository.getMovies());
-        mObservableMovies.addSource(mRepository.getMoviesLike(mLike), new Observer<Resource<List<Movie>>>() {
-            @Override
-            public void onChanged(Resource<List<Movie>> resource) {
-                Log.d("xy", (resource.data!=null ? resource.data.size() + "" : "0"));
-                mObservableMovies.setValue(resource);
-            }
+        mObservableMovies.addSource(mRepository.getMoviesLike(mLike), resource -> {
+            Log.d("xy", (resource.data!=null ? resource.data.size() + "" : "0"));
+            mObservableMovies.setValue(resource);
         });
     }
 

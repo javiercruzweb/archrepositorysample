@@ -1,4 +1,4 @@
-package mx.caltec.archrepositorysample.views.adapter;
+package mx.caltec.archrepositorysample.presentation.views.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

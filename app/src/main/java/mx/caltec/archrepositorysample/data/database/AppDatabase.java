@@ -14,7 +14,7 @@ import mx.caltec.archrepositorysample.data.database.dao.MovieDao;
 import mx.caltec.archrepositorysample.data.model.Movie;
 import mx.caltec.archrepositorysample.util.AppExecutors;
 
-@Database(entities = {Movie.class}, version = 1)
+@Database(entities = {Movie.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "movieDb";
 

@@ -1,9 +1,8 @@
-package mx.caltec.archrepositorysample.views;
+package mx.caltec.archrepositorysample.presentation.views;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,12 +21,16 @@ import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import mx.caltec.archrepositorysample.R;
 import mx.caltec.archrepositorysample.data.Status;
-import mx.caltec.archrepositorysample.viewmodel.MovieListViewModel;
-import mx.caltec.archrepositorysample.views.adapter.MovieAdapter;
+import mx.caltec.archrepositorysample.presentation.viewmodels.MovieListViewModel;
+import mx.caltec.archrepositorysample.presentation.viewmodels.ViewModelProviderFactory;
+import mx.caltec.archrepositorysample.presentation.views.adapter.MovieAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends DaggerAppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private Context mContext;
@@ -36,12 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     private MovieListViewModel viewModel;
 
+    @Inject
+    ViewModelProviderFactory providerFactory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
-        viewModel = new ViewModelProvider(this).get(MovieListViewModel.class);
+        viewModel = ViewModelProviders.of(this, providerFactory).get(MovieListViewModel.class);
         setUI();
         subscribeViewModel();
     }
